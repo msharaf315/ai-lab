@@ -22,7 +22,8 @@ class DoubleConv(nn.Module):
 
 
 class UNET(nn.Module):
-    def __init__(self, in_channels=3, out_channels=1, features=[64, 128, 256, 512]):
+
+    def __init__(self, in_channels=3, out_channels=31, features=[64, 128, 256, 512]):
         super(UNET, self).__init__()
         self.ups = nn.ModuleList()
         self.downs = nn.ModuleList()
@@ -68,7 +69,7 @@ class UNET(nn.Module):
 
 
 def test():
-    x = torch.randn((3, 1, 160, 160))
+    x = torch.randn((3, 1, 161, 161))
     model = UNET(in_channels=1, out_channels=1)
     preds = model(x)
     print(preds.shape)
