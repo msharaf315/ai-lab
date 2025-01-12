@@ -1,0 +1,12 @@
+name: everdell
+services:
+  api:
+    container_name: api
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    environment:
+      - MODEL_PATH=${MODEL_PATH}
+    ports:
+      - 80:80

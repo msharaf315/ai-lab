@@ -12,7 +12,11 @@ class EverdellImage:
 
     def calculate_score(self):
         self.total_score = 0
+        explaination = []
         for item in self.items:
             print(f'{item.name}: {item.calculate_score(self.items,self.resources)} \n')
+            explaination.append(
+                f"{item.name}: {item.calculate_score(self.items,self.resources)}"
+            )
             self.total_score += item.calculate_score(self.items,self.resources)
-        return self.total_score
+        return self.total_score, explaination
