@@ -17,6 +17,8 @@ model_path = os.getenv(
 )
 
 
+print(f"RUNING APP, MODEL PATH={model_path}")
+print(f"file exists: {os.path.isfile(model_path)}")
 @app.post("/calculate-image-score/", response_model=PredictionRes)
 async def create_file(
     image: Annotated[UploadFile, File()],
