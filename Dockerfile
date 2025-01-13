@@ -11,6 +11,6 @@ COPY ./service /service
 RUN mkdir uploaded_images
 
 ENV MODEL_PATH='/models/15_epoch_individual_card_labels.pt'
-EXPOSE 80
+EXPOSE 8080
 
-CMD ["fastapi", "run", "main.py", "--port", "80"]
+CMD ["fastapi", "run", "main.py", "--port", "8080"]
