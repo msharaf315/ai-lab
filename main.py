@@ -22,6 +22,7 @@ async def create_file(
     image: Annotated[UploadFile, File()],
 ):
     print("getting model!")
+    print(f"model path: {model_path}")
     model = YOLO(model_path)
     file_location = f"uploaded_images/{image.filename}"
     with open(file_location, "wb+") as file_object:
