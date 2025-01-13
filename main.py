@@ -12,9 +12,7 @@ app = FastAPI()
 
 
 load_dotenv()
-model_path = os.getenv(
-    "MODEL_PATH", default="models/15_epoch_individual_card_labels.pt"
-)
+model_path = os.getenv("MODEL_PATH", default="models/best.pt")
 
 
 print(f"RUNING APP, MODEL PATH={model_path}")
