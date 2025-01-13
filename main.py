@@ -15,13 +15,13 @@ load_dotenv()
 model_path = os.getenv(
     "MODEL_PATH", default="/models/15_epoch_individual_card_labels.pt"
 )
-model = YOLO(model_path)
 
 
 @app.post("/calculate-image-score/", response_model=PredictionRes)
 async def create_file(
     image: Annotated[UploadFile, File()],
 ):
+    model = YOLO(model_path)
     file_location = f"uploaded_images/{image.filename}"
     with open(file_location, "wb+") as file_object:
         file_object.write(image.file.read())
