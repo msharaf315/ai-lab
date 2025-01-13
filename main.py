@@ -12,7 +12,7 @@ app = FastAPI()
 
 
 load_dotenv()
-model_path = os.getenv("MODEL_PATH", default="models/best.pt")
+model_path = os.getenv("MODEL_PATH", default="/models/best.pt")
 
 
 print(f"RUNING APP, MODEL PATH={model_path}")
