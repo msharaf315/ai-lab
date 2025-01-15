@@ -7,12 +7,32 @@ from ultralytics import YOLO
 
 from schema.predictions_res import PredictionRes
 from service.parse_image_prediction import parse_image_prediction
+from google.cloud import storage
 
 app = FastAPI()
 
+model_path = "/Users/sharaf/github/ai-lab/models/best.pt"
 
-load_dotenv()
-model_path = os.getenv("MODEL_PATH", default="/models/best.pt")
+
+def read_model_from_google():
+    # model_url = https://storage.cloud.google.com/everdell_model/best.pt
+    bucket_name = "everdell_model"
+    blob_name = "best.pt"
+    print("connecting to google storage")
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(blob_name)
+    print("opening blob to load the model")
+    with blob.open("rb") as f:
+        model = f.read()
+        print("done reading model")
+
+    with open(model_path, "wb+") as file_object:
+        file_object.write(model)
+
+
+# save_model_to_google_cloud()
+read_model_from_google()
 
 
 print(f"RUNING APP, MODEL PATH={model_path}")
