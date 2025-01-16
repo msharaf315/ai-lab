@@ -11,7 +11,7 @@ from google.cloud import storage
 
 app = FastAPI()
 
-model_path = "/Users/sharaf/github/ai-lab/models/best.pt"
+model_path = "models/best_from_google.pt"
 
 
 def read_model_from_google():
