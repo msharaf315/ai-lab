@@ -224,7 +224,6 @@ class Theater(BaseItem):
         return Prosperity_score
 
 class Journey(BaseItem):
-    prosperty_card = True
     def calculate_score(self,items,resources):
         score = self.base_score
         curr_location = int(self.name.split("-")[1]) # from journey-2 returns 2
