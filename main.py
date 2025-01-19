@@ -11,11 +11,10 @@ from google.cloud import storage
 
 app = FastAPI()
 
-model_path = "models/best_from_google.pt"
+model_path = "/models/best_from_google.pt"
 
 
 def read_model_from_google():
-    # model_url = https://storage.cloud.google.com/everdell_model/best.pt
     bucket_name = "everdell_model"
     blob_name = "best.pt"
     print("connecting to google storage")
@@ -33,7 +32,9 @@ def read_model_from_google():
 
 # save_model_to_google_cloud()
 read_model_from_google()
-
+print("getting model!")
+print(f"model path: {model_path}")
+model = YOLO(model_path)
 
 print(f"RUNING APP, MODEL PATH={model_path}")
 print(f"file exists: {os.path.isfile(model_path)}")
@@ -41,9 +42,7 @@ print(f"file exists: {os.path.isfile(model_path)}")
 async def create_file(
     image: Annotated[UploadFile, File()],
 ):
-    print("getting model!")
-    print(f"model path: {model_path}")
-    model = YOLO(model_path)
+
     file_location = f"uploaded_images/{image.filename}"
     with open(file_location, "wb+") as file_object:
         file_object.write(image.file.read())

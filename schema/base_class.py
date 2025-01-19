@@ -1,5 +1,5 @@
 cards_base_score_dict = {
-    "narr-card":{"score":-2,"card_type":"unique critter"},
+    "narr-card": {"score": -2, "card_type": "unique critter"},
     "ladeninhaber-card": {"score": 1, "card_type": "unique critter"},
     "gasthaus-card": {"score": 2, "card_type": "common construction"},
     "kran-card": {"score": 1, "card_type": "unique construction"},
@@ -56,6 +56,7 @@ cards_base_score_dict = {
     "special-event-card": {"score": 1, "card_type": "special-event"},
 }
 
+
 class Box:
     def __init__(self, x1: float, x2: float, y1: float, y2: float):
         self.x1 = x1
@@ -64,56 +65,59 @@ class Box:
         self.y2 = y2
 
     def overlaps(self, other_box):
-        return not (self.x2 < other_box.x1 or
-                    self.x1 > other_box.x2 or
-                    self.y2 < other_box.y1 or
-                    self.y1 > other_box.y2)
+        return not (
+            self.x2 < other_box.x1
+            or self.x1 > other_box.x2
+            or self.y2 < other_box.y1
+            or self.y1 > other_box.y2
+        )
 
 
 class BaseItem:
     base_score = 0
     prosperty_card = False
-    def __new__(cls, name: str, id: int, confidence: float, box, segments):
-        if name == 'Architekt-card':
+
+    def __new__(cls, name: str, id: int, confidence: float, box: Box, segments):
+        if name == "Architekt-card":
             instance = super().__new__(Architect)
-            instance.prosperity_card = True  
+            instance.prosperity_card = True
             return instance
-        if name == 'konig-card':
+        if name == "konig-card":
             instance = super().__new__(King)
-            instance.prosperity_card = True 
+            instance.prosperity_card = True
             return instance
-        if name == 'ehefrau-card':
+        if name == "ehefrau-card":
             instance = super().__new__(Wife)
-            instance.prosperity_card = True 
+            instance.prosperity_card = True
             return instance
-        if name == 'schloss-card':
+        if name == "schloss-card":
             instance = super().__new__(Castle)
-            instance.prosperity_card = True 
+            instance.prosperity_card = True
             return instance
-        if name == 'immerbaum-card':
+        if name == "immerbaum-card":
             instance = super().__new__(Evertree)
-            instance.prosperity_card = True  
+            instance.prosperity_card = True
             return instance
-        if name == 'palast-card':
+        if name == "palast-card":
             instance = super().__new__(Palace)
-            instance.prosperity_card = True  
+            instance.prosperity_card = True
             return instance
-        if name == 'schule-card':
+        if name == "schule-card":
             instance = super().__new__(School)
-            instance.prosperity_card = True 
+            instance.prosperity_card = True
             return instance
-        if name == 'theater-card':
+        if name == "theater-card":
             instance = super().__new__(Theater)
-            instance.prosperity_card = True  
+            instance.prosperity_card = True
             return instance
-        if  'journey' in name:
+        if "journey" in name:
             instance = super().__new__(Journey)
             return instance
-        
+
         if name not in cards_base_score_dict:
             print(f"Creating Resource instance for: {name}")
             return super().__new__(Resource)
-        
+
         print(f"Creating BaseItem instance for: {name}")
         return super().__new__(cls)
 
@@ -124,14 +128,15 @@ class BaseItem:
         self.box = box
         self.segments = segments
         try:
-             self.base_score = cards_base_score_dict[name]["score"]
-             self.card_type = cards_base_score_dict[name]["card_type"]
+            self.base_score = cards_base_score_dict[name]["score"]
+            self.card_type = cards_base_score_dict[name]["card_type"]
         except Exception as e:
             print("not found in dict: ", self.name, "error: ", e)
 
-    def calculate_score(self,items,resources=None):
+    def calculate_score(self, items, resources=None):
         return self.base_score
-            
+
+
 class Resource(BaseItem):
     def __init__(self, name, id, confidence, box, segments):
         self.name = name
@@ -143,84 +148,128 @@ class Resource(BaseItem):
 
 
 class Architect(BaseItem):
-    def calculate_score(self,items,resources):
+
+    def calculate_score(self, items, resources):
         Prosperity_score = self.base_score
         for resource in resources:
-            if (resource.name == 'stone' or resource.name == 'resin') and resource.used == False:
-                Prosperity_score = min(self.base_score+6,Prosperity_score+1)
-                print(f'Architect: prosperty_score = {self.prosperty_card} + 1 because of {resource.name} not used ')
+            if (
+                resource.name == "stone" or resource.name == "resin"
+            ) and resource.used == False:
+                Prosperity_score = min(self.base_score + 6, Prosperity_score + 1)
+                print(
+                    f"Architect: prosperty_score = {self.prosperty_card} + 1 because of {resource.name} not used "
+                )
                 resource.used = True
         return Prosperity_score
 
+
 class King(BaseItem):
-    def calculate_score(self,items,resources=None):
+
+    def calculate_score(self, items, resources=None):
         Prosperity_score = self.base_score
         for item in items:
-            if item.card_type == 'basic-event':
-                print(f'King: prosperty_score = {Prosperity_score} + 1 because of {item.name}')
-                Prosperity_score+=1
-            elif item.card_type == 'special-event':
-                print(f'King: prosperty_score = {Prosperity_score} + 2 because of {item.name}')
-                Prosperity_score+=2
-        return Prosperity_score
-    
-class Wife(BaseItem):
-    def calculate_score(self,items,resources=None):
-        Prosperity_score = self.base_score
-        for item in items:
-            if item.name == 'ehemann-card':
-                print(f'Wife: prosperty_score = {Prosperity_score} + 3 because of {item.name}')
-                Prosperity_score+=3
+            if item.card_type == "basic-event":
+                print(
+                    f"King: prosperty_score = {Prosperity_score} + 1 because of {item.name}"
+                )
+                Prosperity_score += 1
+            elif item.card_type == "special-event":
+                print(
+                    f"King: prosperty_score = {Prosperity_score} + 2 because of {item.name}"
+                )
+                Prosperity_score += 2
         return Prosperity_score
 
+
+class Wife(BaseItem):
+
+    def calculate_score(self, items, resources=None):
+        Prosperity_score = self.base_score
+        for item in items:
+            if item.name == "ehemann-card":
+                print(
+                    f"Wife: prosperty_score = {Prosperity_score} + 3 because of {item.name}"
+                )
+                Prosperity_score += 3
+        return Prosperity_score
+
+
 class Castle(BaseItem):
-    def calculate_score(self,items,resources=None):
+
+    def calculate_score(self, items, resources=None):
         Prosperity_score = self.base_score
         for item in items:
             if item.card_type == "common construction":
-                print(f'Castle: prosperty_score = {Prosperity_score} + 1 because of {item.name} which is common construction')
-                Prosperity_score+=1
-        return Prosperity_score    
+                print(
+                    f"Castle: prosperty_score = {Prosperity_score} + 1 because of {item.name} which is common construction"
+                )
+                Prosperity_score += 1
+        return Prosperity_score
+
+
 class Evertree(BaseItem):
-    def calculate_score(self,items,resources=None):
+
+    def calculate_score(self, items, resources=None):
         Prosperity_score = self.base_score
         for item in items:
             if item.prosperty_card == True:
-                print(f'Evertree: prosperty_score = {Prosperity_score} + 1 because of {item.name} which is prosperty card')
-                Prosperity_score+=1
+                print(
+                    f"Evertree: prosperty_score = {Prosperity_score} + 1 because of {item.name} which is prosperty card"
+                )
+                Prosperity_score += 1
         return Prosperity_score
+
+
 class Palace(BaseItem):
-    def calculate_score(self,items,resources=None):
+
+    def calculate_score(self, items, resources=None):
         Prosperity_score = self.base_score
         for item in items:
             if item.card_type == "unique construction":
-                print(f'Palace: prosperty_score = {Prosperity_score} + 1 because of {item.name} which is unique construction')
-                Prosperity_score+=1
+                print(
+                    f"Palace: prosperty_score = {Prosperity_score} + 1 because of {item.name} which is unique construction"
+                )
+                Prosperity_score += 1
         return Prosperity_score
+
+
 class School(BaseItem):
-    def calculate_score(self,items,resources=None):
+
+    def calculate_score(self, items, resources=None):
         Prosperity_score = self.base_score
         for item in items:
             if item.card_type == "common critter":
-                print(f'School: prosperty_score = {Prosperity_score} + 1 because of {item.name} which is common critter')
-                Prosperity_score+=1
+                print(
+                    f"School: prosperty_score = {Prosperity_score} + 1 because of {item.name} which is common critter"
+                )
+                Prosperity_score += 1
         return Prosperity_score
+
+
 class Theater(BaseItem):
-    def calculate_score(self,items,resources=None):
+
+    def calculate_score(self, items, resources=None):
         Prosperity_score = self.base_score
         for item in items:
             if item.card_type == "unique critter":
-                print(f'Theater: prosperty_score = {Prosperity_score} + 1 because of {item.name} which is unique critter')
-                Prosperity_score+=1
+                print(
+                    f"Theater: prosperty_score = {Prosperity_score} + 1 because of {item.name} which is unique critter"
+                )
+                Prosperity_score += 1
         return Prosperity_score
 
+
 class Journey(BaseItem):
-    def calculate_score(self,items,resources):
+
+    def calculate_score(self, items, resources):
         score = self.base_score
-        curr_location = int(self.name.split("-")[1]) # from journey-2 returns 2
+        curr_location = int(self.name.split("-")[1])  # from journey-2 returns 2
         for resource in resources:
-            if 'worker' in resource.name and self.box.overlaps(resource.box): # should be modified to diffrentiate between workers
-                print(f'Worker: score = {curr_location} because of overlapping with {self.name}')
-                score+=curr_location
+            if "worker" in resource.name and self.box.overlaps(
+                resource.box
+            ):  # should be modified to diffrentiate between workers
+                print(
+                    f"Worker: score = {curr_location} because of overlapping with {self.name}"
+                )
+                score += curr_location
         return score
-    
