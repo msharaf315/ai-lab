@@ -29,6 +29,6 @@ def parse_image_prediction(prediction):
 
     image = EverdellImage(items=items, resources=resources, prediction=prediction)
     card_names = [item.name for item in image.items]
-    card_names.append([resource.name for resource in image.resources])
+    [card_names.append(resource.name) for resource in image.resources]
     score, score_details = image.calculate_score()
     return card_names, score, score_details
