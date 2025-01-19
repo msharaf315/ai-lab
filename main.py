@@ -10,10 +10,7 @@ from service.parse_image_prediction import parse_image_prediction
 from google.cloud import storage
 
 app = FastAPI()
-
 model_path = "/models/best_from_google.pt"
-
-
 def read_model_from_google():
     bucket_name = "everdell_model"
     blob_name = "best.pt"
@@ -27,14 +24,14 @@ def read_model_from_google():
         print("done reading model")
 
     with open(model_path, "wb+") as file_object:
+        print("saving model")
         file_object.write(model)
+        print("done saving model")
 
 
 # save_model_to_google_cloud()
 read_model_from_google()
-print("getting model!")
-print(f"model path: {model_path}")
-model = YOLO(model_path)
+
 
 print(f"RUNING APP, MODEL PATH={model_path}")
 print(f"file exists: {os.path.isfile(model_path)}")
@@ -42,13 +39,20 @@ print(f"file exists: {os.path.isfile(model_path)}")
 async def create_file(
     image: Annotated[UploadFile, File()],
 ):
-
+    print("getting model!")
+    print(f"model path: {model_path}")
+    model = YOLO(model_path)
     file_location = f"uploaded_images/{image.filename}"
     with open(file_location, "wb+") as file_object:
         file_object.write(image.file.read())
         prediction = model(file_location)
-        card_names, score, score_details = parse_image_prediction(prediction[0])
+        card_names, resources, score, score_details = parse_image_prediction(
+            prediction[0]
+        )
     os.remove(file_location)
     return PredictionRes(
-        card_names=card_names, score=score, score_details=score_details
+        card_names=card_names,
+        resources=resources,
+        score=score,
+        score_details=score_details,
     )

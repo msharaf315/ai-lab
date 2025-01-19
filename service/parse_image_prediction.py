@@ -4,6 +4,16 @@ from schema.base_class import Box, BaseItem, Resource
 from schema.everdell_image import EverdellImage
 
 
+def aggregate_resources(resources) -> dict:
+    dictionary = {}
+    for resource in resources:
+        if resource in dictionary:
+            dictionary[resource] = dictionary[resource] + 1
+        else:
+            dictionary[resource] = 1
+    return dictionary
+
+
 def parse_image_prediction(prediction):
     # prediction.show()  # display to screen
     prediction_json = json.loads(prediction.to_json())
@@ -29,6 +39,7 @@ def parse_image_prediction(prediction):
 
     image = EverdellImage(items=items, resources=resources, prediction=prediction)
     card_names = [item.name for item in image.items]
-    [card_names.append(resource.name) for resource in image.resources]
+    resources = [(resource.name) for resource in image.resources]
+    resources_dict = aggregate_resources(resources)
     score, score_details = image.calculate_score()
-    return card_names, score, score_details
+    return card_names, resources_dict, score, score_details

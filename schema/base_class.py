@@ -46,6 +46,7 @@ cards_base_score_dict = {
     "historiker-card": {"score": 1, "card_type": "unique critter"},
     "uhrenturm-card": {"score": 0, "card_type": "unique construction"},
     "theater-card": {"score": 3, "card_type": "unique construction"},
+    "minenmaulwurf-card": {"score": 1, "card_type": "common critter"},
     "meinenmaulwurf-card": {"score": 1, "card_type": "common critter"},
     "score-token-1": {"score": 1, "card_type": "token"},
     "score-token-3": {"score": 3, "card_type": "token"},
