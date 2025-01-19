@@ -9,4 +9,4 @@ services:
     environment:
       - MODEL_PATH=${MODEL_PATH}
     ports:
-      - 80:80
+      - 8080:8080

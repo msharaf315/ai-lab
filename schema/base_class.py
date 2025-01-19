@@ -154,19 +154,14 @@ class Architect(BaseItem):
 
     def calculate_score(self, items, resources=[]):
         prosperity_score = self.base_score
-
+        bonus = 0
         for resource in resources:
-            if (
-                resource.name == "stone"
-                or resource.name == "resin"
-                and resource.used == False
-            ):
-                prosperity_score = min(self.base_score + 6, prosperity_score + 1)
+            if resource.name == "stone" or resource.name == "resin" and bonus < 6:
+                bonus += 1
                 print(
-                    f"Architect: prosperty_score = {prosperity_score} + 1 because of {resource.name} not used "
+                    f"Architect: prosperty_score = {prosperity_score} + 1 because of {resource.name}"
                 )
-                resource.used = True
-        return prosperity_score
+        return prosperity_score + bonus
 
 
 class King(BaseItem):
