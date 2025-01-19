@@ -46,7 +46,7 @@ cards_base_score_dict = {
     "historiker-card": {"score": 1, "card_type": "unique critter"},
     "uhrenturm-card": {"score": 0, "card_type": "unique construction"},
     "theater-card": {"score": 3, "card_type": "unique construction"},
-    "minenmaulwurf-card": {"score": 1, "card_type": "common critter"},
+    "meinenmaulwurf-card": {"score": 1, "card_type": "common critter"},
     "score-token-1": {"score": 1, "card_type": "token"},
     "score-token-3": {"score": 3, "card_type": "token"},
     "basic-event-city-monument": {"score": 3, "card_type": "basic-event"},
@@ -74,7 +74,7 @@ class BaseItem:
     base_score = 0
     prosperty_card = False
     def __new__(cls, name: str, id: int, confidence: float, box, segments):
-        if name == 'Architekt-card':
+        if name == 'architekt-card':
             instance = super().__new__(Architect)
             instance.prosperity_card = True  
             return instance
@@ -129,7 +129,7 @@ class BaseItem:
         except Exception as e:
             print("not found in dict: ", self.name, "error: ", e)
 
-    def calculate_score(self,items,resources=None):
+    def calculate_score(self,items,resources):
         return self.base_score
             
 class Resource(BaseItem):
@@ -140,19 +140,22 @@ class Resource(BaseItem):
         self.box = box
         self.segments = segments
         self.used = False
+        print(f'${self.name} init and used = ${self.used}')
 
 
 class Architect(BaseItem):
+    prosperty_card = True
     def calculate_score(self,items,resources):
         Prosperity_score = self.base_score
         for resource in resources:
-            if (resource.name == 'stone' or resource.name == 'resin') and resource.used == False:
+            if resource.name == 'stone' or resource.name == 'resin' and resource.used == False:
                 Prosperity_score = min(self.base_score+6,Prosperity_score+1)
-                print(f'Architect: prosperty_score = {self.prosperty_card} + 1 because of {resource.name} not used ')
+                print(f'Architect: prosperty_score = {Prosperity_score} + 1 because of {resource.name} not used ')
                 resource.used = True
         return Prosperity_score
 
 class King(BaseItem):
+    prosperty_card = True
     def calculate_score(self,items,resources=None):
         Prosperity_score = self.base_score
         for item in items:
@@ -165,6 +168,7 @@ class King(BaseItem):
         return Prosperity_score
     
 class Wife(BaseItem):
+    prosperty_card = True
     def calculate_score(self,items,resources=None):
         Prosperity_score = self.base_score
         for item in items:
@@ -174,6 +178,7 @@ class Wife(BaseItem):
         return Prosperity_score
 
 class Castle(BaseItem):
+    prosperty_card = True
     def calculate_score(self,items,resources=None):
         Prosperity_score = self.base_score
         for item in items:
@@ -182,14 +187,16 @@ class Castle(BaseItem):
                 Prosperity_score+=1
         return Prosperity_score    
 class Evertree(BaseItem):
+    prosperty_card = True
     def calculate_score(self,items,resources=None):
         Prosperity_score = self.base_score
         for item in items:
-            if item.prosperty_card == True:
+            if item.prosperty_card == True and item.name != 'immerbaum-card':
                 print(f'Evertree: prosperty_score = {Prosperity_score} + 1 because of {item.name} which is prosperty card')
                 Prosperity_score+=1
         return Prosperity_score
 class Palace(BaseItem):
+    prosperty_card = True
     def calculate_score(self,items,resources=None):
         Prosperity_score = self.base_score
         for item in items:
@@ -198,6 +205,7 @@ class Palace(BaseItem):
                 Prosperity_score+=1
         return Prosperity_score
 class School(BaseItem):
+    prosperty_card = True
     def calculate_score(self,items,resources=None):
         Prosperity_score = self.base_score
         for item in items:
@@ -206,6 +214,7 @@ class School(BaseItem):
                 Prosperity_score+=1
         return Prosperity_score
 class Theater(BaseItem):
+    prosperty_card = True
     def calculate_score(self,items,resources=None):
         Prosperity_score = self.base_score
         for item in items:
@@ -215,6 +224,7 @@ class Theater(BaseItem):
         return Prosperity_score
 
 class Journey(BaseItem):
+    prosperty_card = True
     def calculate_score(self,items,resources):
         score = self.base_score
         curr_location = int(self.name.split("-")[1]) # from journey-2 returns 2
