@@ -21,6 +21,7 @@ class EverdellImage:
                 return  
 
             if existing_card.name == new_card.name:
+                print(f"Duplicate cards detected Name: {existing_card.name}")
                 if new_card.confidence > existing_card.confidence:
                     print(f"Replacing card {existing_card.name} (confidence: {existing_card.confidence}) "
                           f"with new card (confidence: {new_card.confidence}).")
