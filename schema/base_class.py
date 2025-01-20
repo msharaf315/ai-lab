@@ -40,7 +40,7 @@ cards_base_score_dict = {
     "architekt-card": {"score": 2, "card_type": "unique critter"},
     "barde-card": {"score": 0, "card_type": "unique critter"},
     "immerbaum-card": {"score": 5, "card_type": "unique construction"},
-    "haustierer-card": {"score": 1, "card_type": "common critter"},
+    "hausierer-card": {"score": 1, "card_type": "common critter"},
     "konigin-card": {"score": 4, "card_type": "unique critter"},
     "verlies-card": {"score": 0, "card_type": "unique construction"},
     "historiker-card": {"score": 1, "card_type": "unique critter"},
@@ -156,11 +156,9 @@ class Architect(BaseItem):
         prosperity_score = self.base_score
         bonus = 0
         for resource in resources:
-            if resource.name == "stone" or resource.name == "resin" and bonus < 6:
+            if (resource.name == "stone" or resource.name == "resin") and bonus < 6:
                 bonus += 1
-                print(
-                    f"Architect: prosperty_score = {prosperity_score} + 1 because of {resource.name}"
-                )
+                print(f"Architect: bonus = {bonus} + 1 because of {resource.name}")
         return prosperity_score + bonus
 
 
