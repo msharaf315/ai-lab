@@ -19,7 +19,7 @@ class EverdellImage:
                           f"with new card (confidence: {new_card.confidence}).")
                     self.items[i] = new_card  
                 return  
-                
+
             if existing_card.name == new_card.name:
                 if new_card.confidence > existing_card.confidence:
                     print(f"Replacing card {existing_card.name} (confidence: {existing_card.confidence}) "
@@ -32,7 +32,9 @@ class EverdellImage:
         self.total_score = 0
         explaination = []
         for item in self.items:
-            print(f'{item.name}: {item.calculate_score(self.items,self.resources)}')
+            print(
+                f"LOG: {item.name}: {item.calculate_score(self.items,self.resources)}"
+            )
             explaination.append(
                 f"{item.name}: {item.calculate_score(self.items,self.resources)}"
             )

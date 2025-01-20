@@ -156,7 +156,7 @@ class Architect(BaseItem):
         prosperity_score = self.base_score
         bonus = 0
         for resource in resources:
-            if (resource.name == "stone" or resource.name == "resin") and bonus < 6:
+            if (resource.name == "stone" or resource.name == "resen") and bonus < 6:
                 bonus += 1
                 print(f"Architect: bonus = {bonus} + 1 because of {resource.name}")
         return prosperity_score + bonus
@@ -241,14 +241,15 @@ class School(BaseItem):
     prosperty_card = True
 
     def calculate_score(self, items, resources=None):
-        Prosperity_score = self.base_score
+        prosperity_score = self.base_score
+        bonus = 0
         for item in items:
             if item.card_type == "common critter":
                 print(
-                    f"School: prosperty_score = {Prosperity_score} + 1 because of {item.name} which is common critter"
+                    f"School: prosperty_score = {bonus} + 1 because of {item.name} which is common critter"
                 )
-                Prosperity_score += 1
-        return Prosperity_score
+                bonus += 1
+        return prosperity_score + bonus
 
 
 class Theater(BaseItem):
