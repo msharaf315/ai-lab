@@ -5,8 +5,14 @@ from functools import reduce
 class EverdellImage:
     total_score: int
 
-    def __init__(self, items: list[BaseItem],resources: list[Resource], prediction: any):
-        self.items = items
+    def __init__(
+        self,
+        prediction: any,
+        items: list[BaseItem],
+        resources: list[Resource],
+    ):
+        self.items = []
+        [self.add_card(item) for item in items]
         self.prediction = prediction
         self.resources = resources
 
@@ -18,7 +24,7 @@ class EverdellImage:
                     print(f"Replacing card {existing_card.name} (confidence: {existing_card.confidence}) "
                           f"with new card (confidence: {new_card.confidence}).")
                     self.items[i] = new_card  
-                return  
+                    return
 
             if existing_card.name == new_card.name:
                 print(f"Duplicate cards detected Name: {existing_card.name}")
@@ -26,7 +32,8 @@ class EverdellImage:
                     print(f"Replacing card {existing_card.name} (confidence: {existing_card.confidence}) "
                           f"with new card (confidence: {new_card.confidence}).")
                     self.items[i] = new_card  
-                return
+                    return
+
         self.items.append(new_card)
 
     def calculate_score(self):

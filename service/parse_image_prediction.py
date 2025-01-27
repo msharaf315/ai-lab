@@ -36,9 +36,10 @@ def parse_image_prediction(prediction):
             resources.append(item)
         else:
             items.append(item)
+    print(f"items {items}")
+    print(f"reources: {resources}")
 
-    image = EverdellImage(items=None, resources=resources, prediction=prediction)
-    image.items = [image.add_card(item) for item in items]
+    image = EverdellImage(items=items, resources=resources, prediction=prediction)
     card_names = [item.name for item in image.items]
     resources = [(resource.name) for resource in image.resources]
     resources_dict = aggregate_resources(resources)
