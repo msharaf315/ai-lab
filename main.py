@@ -10,7 +10,7 @@ from service.parse_image_prediction import parse_image_prediction
 from google.cloud import storage
 
 app = FastAPI()
-model_path = "/models/best_from_google.pt"
+model_path = "/Users/sharaf/github/ai-lab/models/best_from_google.pt"
 def read_model_from_google():
     bucket_name = "everdell_model"
     blob_name = "best.pt"
